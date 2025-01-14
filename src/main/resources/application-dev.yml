@@ -1,5 +1,8 @@
 server:
   port: 8080
+  servlet:
+    session:
+      timeout: 24h
 spring:
   thymeleaf:
     cache: false
@@ -16,6 +19,6 @@ spring:
     driver-class-name: oracle.jdbc.OracleDriver
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
       # 앱이 재실행되면 같은 거 삭제하고 생성 -> create
       # DB 스키마 자동생성, 앱이 재실행되어도 데이터는 유지된다. -> update
