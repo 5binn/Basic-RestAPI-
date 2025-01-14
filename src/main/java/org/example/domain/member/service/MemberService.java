@@ -18,8 +18,8 @@ public class MemberService {
 
     // 주어진 username 에 해당하는 Member 반환, 없으면 null
     public MemberResponseDto findByUsername(String username) {
-        Optional<Member> optionalMember = memberRepository.findByUsername(username);
-        return optionalMember
+        Optional<Member> member = memberRepository.findByUsername(username);
+        return member
                 .map(MemberResponseDto::new)
                 .orElse(null);
     }
@@ -43,11 +43,11 @@ public class MemberService {
         return optionalMember.isPresent()
                 && SecurityConfig.PasswordEncoder.checkPassword(password, optionalMember.get().getPassword());
     }
-
+    //세션 추가
     public void login(HttpServletRequest request, HttpServletResponse response,String username) {
         request.getSession().setAttribute("username", username);
     }
-
+    //세션 삭제
     public void logout(HttpServletRequest request) {
         request.getSession().invalidate();
     }

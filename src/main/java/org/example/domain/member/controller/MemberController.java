@@ -38,7 +38,8 @@ public class MemberController {
                     .body(ResultData.of(ResultCode.F_05, "중복 ID 존재"));
         }
         return ResponseEntity
-                .ok(ResultData.of(ResultCode.S_02, "회원가입 성공"));
+                .status(HttpStatus.CREATED)
+                .body(ResultData.of(ResultCode.S_02, "회원가입 성공", data));
     }
 
     @PostMapping("/login")
