@@ -1,6 +1,7 @@
 package org.example.domain.article.dto;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,7 +9,7 @@ import lombok.Setter;
 public class ArticleRequestDto {
     @Getter
     @Setter
-    public static class CreateRq {
+    public static class ArticleRq {
         @NotBlank
         private String title;
         @NotBlank

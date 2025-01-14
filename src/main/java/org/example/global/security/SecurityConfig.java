@@ -16,7 +16,7 @@ public class SecurityConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(loginInterceptor)
                 .addPathPatterns("/**")
-                .excludePathPatterns("/members/login", "/members/login", "/members/signup");
+                .excludePathPatterns("/members/**");
     }
 
     public static class PasswordEncoder {

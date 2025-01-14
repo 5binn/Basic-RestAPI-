@@ -2,6 +2,7 @@ package org.example.domain.member.service;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.example.domain.member.dto.MemberResponseDto;
 import org.example.domain.member.entity.Member;
@@ -43,12 +44,25 @@ public class MemberService {
         return optionalMember.isPresent()
                 && SecurityConfig.PasswordEncoder.checkPassword(password, optionalMember.get().getPassword());
     }
+
     //세션 추가
-    public void login(HttpServletRequest request, HttpServletResponse response,String username) {
+    public void login(HttpServletRequest request, HttpServletResponse response, String username) {
         request.getSession().setAttribute("username", username);
     }
+
     //세션 삭제
     public void logout(HttpServletRequest request) {
         request.getSession().invalidate();
     }
+
+    //로그인한 member 가져오기
+    public Member getMember(HttpServletRequest request) {
+        Object username = request.getSession().getAttribute("username");
+        if (username != null) {
+            return memberRepository.findByUsername((String) username).orElse(null);
+        }
+        return null;
+    }
+
+
 }

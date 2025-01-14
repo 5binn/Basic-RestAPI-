@@ -6,6 +6,8 @@ import org.example.domain.article.dto.ArticleResponseDto;
 import org.example.domain.article.entity.Article;
 import org.example.domain.article.repository.ArticleRepository;
 import org.example.domain.member.dto.MemberResponseDto;
+import org.example.domain.member.entity.Member;
+import org.example.domain.member.service.MemberService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -32,15 +34,18 @@ public class ArticleService {
                 .map(ArticleResponseDto::new)
                 .orElse(null);
     }
+
     //게시글 등록
-    public ArticleResponseDto registerArticle(String title, String content) {
+    public ArticleResponseDto registerArticle(String title, String content, Member member) {
         Article article = Article.builder()
                 .title(title)
                 .content(content)
+                .member(member)
                 .build();
         articleRepository.save(article);
         return new ArticleResponseDto(article);
     }
+
     //게시글 수정, 해당 게시글 없으면 null 반환
     public ArticleResponseDto updateArticle(Long id, String title, String content) {
         Optional<Article> article = articleRepository.findById(id);
@@ -54,13 +59,10 @@ public class ArticleService {
         articleRepository.save(updateArticle);
         return new ArticleResponseDto(updateArticle);
     }
+
     //게시글 삭제, 해당 게시글 없으면 false 반환
-    public boolean deleteArticle(Long id) {
+    public void deleteArticle(Long id) {
         Optional<Article> article = articleRepository.findById(id);
-        if (article.isPresent()) {
-            articleRepository.delete(article.get());
-            return true;
-        }
-        return false;
+        article.ifPresent(articleRepository::delete);
     }
 }
