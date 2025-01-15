@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.domain.member.dto.MemberRequestDto;
 import org.example.domain.member.dto.MemberResponseDto;
 import org.example.domain.member.service.MemberService;
+import org.example.global.handler.CommonHandler;
 import org.example.global.resultData.ResultCode;
 import org.example.global.resultData.ResultData;
 import org.springframework.http.HttpStatus;
@@ -22,15 +23,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class MemberController {
     private final MemberService memberService;
+    private final CommonHandler commonHandler;
 
 
     @PostMapping("/signup")
     public ResponseEntity<ResultData<MemberResponseDto>> signup(@RequestBody @Valid MemberRequestDto.IdPwRq createRq, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            return ResponseEntity
-                    .status(HttpStatus.BAD_REQUEST)
-                    .body(ResultData.of(ResultCode.F_06, "공백 입력"));
-        }
+        //공백 검증
+        ResponseEntity<ResultData<MemberResponseDto>> blankErrors = commonHandler.handleBlankErrors(bindingResult);
+        if (blankErrors!= null) return blankErrors;
+        //중복 ID 검증
         MemberResponseDto data = memberService.signup(createRq.getUsername(), createRq.getPassword());
         if (data == null) {
             return ResponseEntity
@@ -45,16 +46,16 @@ public class MemberController {
     @PostMapping("/login")
     public ResponseEntity<ResultData<MemberResponseDto>> login(@RequestBody @Valid MemberRequestDto.IdPwRq loginRq, BindingResult bindingResult,
                                                                HttpServletRequest request, HttpServletResponse response) {
-        if (bindingResult.hasErrors()) {
-            return ResponseEntity
-                    .status(HttpStatus.BAD_REQUEST)
-                    .body(ResultData.of(ResultCode.F_06, "입력값 오류"));
-        }
+        //공백 검증
+        ResponseEntity<ResultData<MemberResponseDto>> blankErrors = commonHandler.handleBlankErrors(bindingResult);
+        if (blankErrors!= null) return blankErrors;
+        //ID/PW 검증
         if (!memberService.loginCheck(loginRq.getUsername(), loginRq.getPassword())) {
             return ResponseEntity
                     .status(HttpStatus.UNAUTHORIZED)
-                    .body(ResultData.of(ResultCode.F_02, "아이디/비밀번호 일치하지 않음"));
+                    .body(ResultData.of(ResultCode.F_02, "ID/PW 일치하지 않음"));
         }
+        //로그인
         memberService.login(request, response, loginRq.getUsername());
         return ResponseEntity
                 .ok(ResultData.of(ResultCode.S_06, "로그인 성공"));

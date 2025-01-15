@@ -31,6 +31,7 @@ public class ArticleService {
                 .orElse(null);
     }
 
+    //dto 가 아닌 객체 반환
     public Article getArticleEntityById(Long id) {
         return articleRepository.findById(id)
                 .orElseThrow(() -> null);

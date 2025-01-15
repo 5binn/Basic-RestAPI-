@@ -16,6 +16,7 @@ import java.util.Optional;
 public class CommentService {
     private final CommentRepository commentRepository;
 
+    //같은 articleId 에 해당하는 commentList
     public List<CommentResponseDto> getCommentsByArticleId(Long id) {
         List<Comment> commentList = commentRepository.findByArticleId(id);
         return commentList.stream()
@@ -23,6 +24,7 @@ public class CommentService {
                 .toList();
     }
 
+    //commentId로 단건 comment 가져오기
     public CommentResponseDto getCommentById(Long id) {
         Optional<Comment> comment = commentRepository.findById(id);
         return comment
@@ -30,11 +32,13 @@ public class CommentService {
                 .orElse(null);
     }
 
+    //dto 가 아닌 객체 반환
     public Comment getCommentEntityById(Long id) {
         return commentRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException(("해당 댓글 없음")));
+                .orElseThrow(null);
     }
 
+    //등록
     public CommentResponseDto registerComment(String content, Member member, Article article) {
         Comment comment = Comment.builder()
                 .content(content)
@@ -45,6 +49,7 @@ public class CommentService {
         return new CommentResponseDto(comment);
     }
 
+    //수정
     public CommentResponseDto updateComment(Long id, String content) {
         Comment updateComment = getCommentEntityById(id).toBuilder()
                 .content(content)
@@ -53,6 +58,7 @@ public class CommentService {
         return new CommentResponseDto(updateComment);
     }
 
+    //삭제
     public void deleteComment(Long id) {
         Optional<Comment> comment = commentRepository.findById(id);
         comment.ifPresent(commentRepository::delete);

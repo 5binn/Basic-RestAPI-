@@ -64,7 +64,7 @@ public class MemberService {
         return null;
     }
 
-    //작성자 확인
+    //username 과 현재 로그인한 member 가 같은지 확인
     public boolean hasPermission(HttpServletRequest request, String username) {
         Member member = getLoggedInMember(request);
         return member.getUsername().equals(username);
