@@ -1,18 +1,14 @@
 package org.example.domain.article.service;
 
-import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.example.domain.article.dto.ArticleResponseDto;
 import org.example.domain.article.entity.Article;
 import org.example.domain.article.repository.ArticleRepository;
-import org.example.domain.member.dto.MemberResponseDto;
 import org.example.domain.member.entity.Member;
-import org.example.domain.member.service.MemberService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -35,6 +31,11 @@ public class ArticleService {
                 .orElse(null);
     }
 
+    public Article getArticleEntityById(Long id) {
+        return articleRepository.findById(id)
+                .orElseThrow(() -> null);
+    }
+
     //게시글 등록
     public ArticleResponseDto registerArticle(String title, String content, Member member) {
         Article article = Article.builder()
@@ -46,13 +47,9 @@ public class ArticleService {
         return new ArticleResponseDto(article);
     }
 
-    //게시글 수정, 해당 게시글 없으면 null 반환
+    //게시글 수정
     public ArticleResponseDto updateArticle(Long id, String title, String content) {
-        Optional<Article> article = articleRepository.findById(id);
-        if (article.isEmpty()) {
-            return null;
-        }
-        Article updateArticle = article.get().toBuilder()
+        Article updateArticle = getArticleEntityById(id).toBuilder()
                 .title(title)
                 .content(content)
                 .build();
@@ -60,9 +57,11 @@ public class ArticleService {
         return new ArticleResponseDto(updateArticle);
     }
 
-    //게시글 삭제, 해당 게시글 없으면 false 반환
+    //게시글 삭제
     public void deleteArticle(Long id) {
         Optional<Article> article = articleRepository.findById(id);
         article.ifPresent(articleRepository::delete);
     }
+
+
 }

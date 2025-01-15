@@ -2,8 +2,8 @@ package org.example.domain.member.service;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.example.domain.comment.dto.CommentResponseDto;
 import org.example.domain.member.dto.MemberResponseDto;
 import org.example.domain.member.entity.Member;
 import org.example.domain.member.repository.MemberRepository;
@@ -56,12 +56,18 @@ public class MemberService {
     }
 
     //로그인한 member 가져오기
-    public Member getMember(HttpServletRequest request) {
+    public Member getLoggedInMember(HttpServletRequest request) {
         Object username = request.getSession().getAttribute("username");
         if (username != null) {
             return memberRepository.findByUsername((String) username).orElse(null);
         }
         return null;
+    }
+
+    //작성자 확인
+    public boolean hasPermission(HttpServletRequest request, String username) {
+        Member member = getLoggedInMember(request);
+        return member.getUsername().equals(username);
     }
 
 

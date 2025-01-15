@@ -5,7 +5,6 @@ import lombok.NoArgsConstructor;
 import org.example.domain.article.entity.Article;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Getter
 @NoArgsConstructor

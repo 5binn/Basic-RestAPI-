@@ -1,16 +1,14 @@
-package org.example.domain.article.dto;
+package org.example.domain.comment.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
-public class ArticleRequestDto {
+public class CommentRequestDto {
     @Getter
     @Setter
-    public static class ArticleRq {
-        @NotBlank
-        private String title;
+    public static class CommentRq{
         @NotBlank
         private String content;
     }
