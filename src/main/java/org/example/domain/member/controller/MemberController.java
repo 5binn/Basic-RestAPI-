@@ -6,6 +6,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.domain.member.dto.MemberRequestDto;
 import org.example.domain.member.dto.MemberResponseDto;
+import org.example.domain.member.entity.Member;
 import org.example.domain.member.service.MemberService;
 import org.example.global.handler.CommonHandler;
 import org.example.global.resultData.ResultCode;
@@ -13,10 +14,7 @@ import org.example.global.resultData.ResultData;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/members")
@@ -25,12 +23,17 @@ public class MemberController {
     private final MemberService memberService;
     private final CommonHandler commonHandler;
 
+    @GetMapping("/session")
+    public ResponseEntity<ResultData<Boolean>> checkSession(HttpServletRequest request) {
+        Member member = memberService.getLoggedInMember(request);
+        return ResponseEntity.ok(ResultData.of(ResultCode.S_01, "로그인 상태 확인", member != null));
+    }
 
     @PostMapping("/signup")
     public ResponseEntity<ResultData<MemberResponseDto>> signup(@RequestBody @Valid MemberRequestDto.IdPwRq createRq, BindingResult bindingResult) {
         //공백 검증
         ResponseEntity<ResultData<MemberResponseDto>> blankErrors = commonHandler.handleBlankErrors(bindingResult);
-        if (blankErrors!= null) return blankErrors;
+        if (blankErrors != null) return blankErrors;
         //중복 ID 검증
         MemberResponseDto data = memberService.signup(createRq.getUsername(), createRq.getPassword());
         if (data == null) {
@@ -48,12 +51,12 @@ public class MemberController {
                                                                HttpServletRequest request, HttpServletResponse response) {
         //공백 검증
         ResponseEntity<ResultData<MemberResponseDto>> blankErrors = commonHandler.handleBlankErrors(bindingResult);
-        if (blankErrors!= null) return blankErrors;
+        if (blankErrors != null) return blankErrors;
         //ID/PW 검증
         if (!memberService.loginCheck(loginRq.getUsername(), loginRq.getPassword())) {
             return ResponseEntity
                     .status(HttpStatus.UNAUTHORIZED)
-                    .body(ResultData.of(ResultCode.F_02, "ID/PW 일치하지 않음"));
+                    .body(ResultData.of(ResultCode.F_02, "ID 또는 PW 일치하지 않음"));
         }
         //로그인
         memberService.login(request, response, loginRq.getUsername());

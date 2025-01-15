@@ -3,11 +3,10 @@ package org.example.domain.member.service;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.example.domain.comment.dto.CommentResponseDto;
 import org.example.domain.member.dto.MemberResponseDto;
 import org.example.domain.member.entity.Member;
 import org.example.domain.member.repository.MemberRepository;
-import org.example.global.security.SecurityConfig;
+import org.example.global.security.WebConfig;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -32,7 +31,7 @@ public class MemberService {
         }
         Member member = Member.builder()
                 .username(username)
-                .password(SecurityConfig.PasswordEncoder.encodePassword(password))
+                .password(WebConfig.PasswordEncoder.encodePassword(password))
                 .build();
         this.memberRepository.save(member);
         return new MemberResponseDto(member);
@@ -42,7 +41,7 @@ public class MemberService {
     public boolean loginCheck(String username, String password) {
         Optional<Member> optionalMember = memberRepository.findByUsername(username);
         return optionalMember.isPresent()
-                && SecurityConfig.PasswordEncoder.checkPassword(password, optionalMember.get().getPassword());
+                && WebConfig.PasswordEncoder.checkPassword(password, optionalMember.get().getPassword());
     }
 
     //세션 추가
