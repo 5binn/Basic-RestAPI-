@@ -3,6 +3,7 @@ package org.example.domain.member.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.example.domain.member.dto.MemberRequestDto;
 import org.example.domain.member.dto.MemberResponseDto;
@@ -30,7 +31,9 @@ public class MemberController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<ResultData<MemberResponseDto>> signup(@RequestBody @Valid MemberRequestDto.IdPwRq createRq, BindingResult bindingResult) {
+    public ResponseEntity<ResultData<MemberResponseDto>> signup(
+            @RequestBody @Valid MemberRequestDto.IdPwRq createRq,
+            BindingResult bindingResult, HttpServletRequest request) {
         //공백 검증
         ResponseEntity<ResultData<MemberResponseDto>> blankErrors = commonHandler.handleBlankErrors(bindingResult);
         if (blankErrors != null) return blankErrors;
@@ -41,14 +44,16 @@ public class MemberController {
                     .status(HttpStatus.CONFLICT)
                     .body(ResultData.of(ResultCode.F_05, "중복 ID 존재"));
         }
+        memberService.login(request, createRq.getUsername());
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(ResultData.of(ResultCode.S_02, "회원가입 성공", data));
     }
 
     @PostMapping("/login")
-    public ResponseEntity<ResultData<MemberResponseDto>> login(@RequestBody @Valid MemberRequestDto.IdPwRq loginRq, BindingResult bindingResult,
-                                                               HttpServletRequest request, HttpServletResponse response) {
+    public ResponseEntity<ResultData<MemberResponseDto>> login(
+            @RequestBody @Valid MemberRequestDto.IdPwRq loginRq,
+            BindingResult bindingResult, HttpServletRequest request) {
         //공백 검증
         ResponseEntity<ResultData<MemberResponseDto>> blankErrors = commonHandler.handleBlankErrors(bindingResult);
         if (blankErrors != null) return blankErrors;
@@ -59,7 +64,7 @@ public class MemberController {
                     .body(ResultData.of(ResultCode.F_02, "ID 또는 PW 일치하지 않음"));
         }
         //로그인
-        memberService.login(request, response, loginRq.getUsername());
+        memberService.login(request, loginRq.getUsername());
         return ResponseEntity
                 .ok(ResultData.of(ResultCode.S_06, "로그인 성공"));
     }

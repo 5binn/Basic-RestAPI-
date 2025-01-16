@@ -45,7 +45,7 @@ public class MemberService {
     }
 
     //세션 추가
-    public void login(HttpServletRequest request, HttpServletResponse response, String username) {
+    public void login(HttpServletRequest request, String username) {
         request.getSession().setAttribute("username", username);
     }
 

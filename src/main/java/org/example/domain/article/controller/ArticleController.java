@@ -25,7 +25,7 @@ public class ArticleController {
     private final MemberService memberService;
     private final CommonHandler commonHandler;
 
-    @GetMapping("/")
+    @GetMapping("")
     public ResponseEntity<ResultData<List<ArticleResponseDto>>> getAllArticles() {
         List<ArticleResponseDto> data = articleService.getAllArticles();
         return ResponseEntity.ok(ResultData.of(ResultCode.S_05, data.isEmpty() ? "데이터 없음" : "전체 게시글 조회", data));
@@ -43,7 +43,7 @@ public class ArticleController {
                 .ok(ResultData.of(ResultCode.S_05, String.format("ID:%d 게시글 조회", id), data));
     }
 
-    @PostMapping("/")
+    @PostMapping("")
     public ResponseEntity<ResultData<ArticleResponseDto>> registerArticle(
             @RequestBody @Valid ArticleRequestDto.ArticleRq createRq,
             BindingResult bindingResult,

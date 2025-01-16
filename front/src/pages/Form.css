@@ -1,0 +1,89 @@
+.login-container {
+  width: 100%;
+  max-width: 400px;
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+  margin: 5px;
+  text-align: center;
+  font-size: 2rem;
+  color: #333;
+}
+
+input:focus {
+  outline: none;
+  border-color: #007bff;
+}
+
+.input-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.input-item input {
+  width: 75%;
+  padding: 9px;
+  margin: 8px 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.login-button {
+  width: 100%;
+  margin-top: 5px;
+  padding: 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.login-button:hover {
+  background-color: #0056b3;
+}
+
+.btn {
+  width: 100%;
+  padding: 10px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-active {
+  background-color: #4caf50;
+  color: white;
+}
+
+.btn-active:hover {
+  background-color: #45a049;
+}
+
+.btn-disabled {
+  background-color: #ccc;
+  color: #666;
+  cursor: not-allowed;
+}
+
+.warn {
+  color: red;
+}
+
+.register-container {
+  width: 360px;
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}

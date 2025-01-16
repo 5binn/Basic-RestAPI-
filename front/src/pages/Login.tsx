@@ -1,14 +1,9 @@
 import axios, { AxiosError } from "axios";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-
-interface ErrorResponse {
-  msg: string;
-}
+import { ErrorResponse } from "../types/Types";
+import "./Form.css";
 
 export default function Login({ setIsLogin }: any) {
-  const navigate = useNavigate();
-
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
@@ -38,19 +33,19 @@ export default function Login({ setIsLogin }: any) {
   }
 
   return (
-    <div>
-      <h1>LOGIN 화면</h1>
+    <div className="login-container">
+      <h1>로그인</h1>
       <form onSubmit={handleLogin}>
-        <div>
-          <label>ID</label>
+        <div className="input-item">
+          <span>ID</span>
           <input
             id="username"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
           />
         </div>
-        <div>
-          <label>PW</label>
+        <div className="input-item">
+          <span>PW</span>
           <input
             type="password"
             id="password"
@@ -58,12 +53,10 @@ export default function Login({ setIsLogin }: any) {
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
-        <button type="submit">로그인</button>
+        <button className="login-button" type="submit">
+          로그인
+        </button>
       </form>
-      <div className="loginBottom mt-3">
-        <a href="">회원가입</a>
-        <a href="">ID/PW 찾기</a>
-      </div>
     </div>
   );
 }
