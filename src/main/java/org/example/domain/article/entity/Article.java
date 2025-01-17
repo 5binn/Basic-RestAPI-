@@ -22,6 +22,7 @@ import java.util.List;
 @AllArgsConstructor
 public class Article extends BaseEntity {
     private String title;
+    @Column(length = 4000)
     private String content;
     @ManyToOne
     @JoinColumn(name = "member_id")

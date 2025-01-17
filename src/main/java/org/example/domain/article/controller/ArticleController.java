@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.domain.article.dto.ArticleRequestDto;
 import org.example.domain.article.dto.ArticleResponseDto;
 import org.example.domain.article.service.ArticleService;
+import org.example.domain.member.entity.Member;
 import org.example.domain.member.service.MemberService;
 import org.example.global.handler.CommonHandler;
 import org.example.global.resultData.ResultCode;
@@ -51,11 +52,18 @@ public class ArticleController {
         //공백 검증
         ResponseEntity<ResultData<ArticleResponseDto>> blankErrors = commonHandler.handleBlankErrors(bindingResult);
         if (blankErrors != null) return blankErrors;
+        //권한 검증
+        Member member = memberService.getLoggedInMember(request);
+        if (member == null) {
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body(ResultData.of(ResultCode.F_02, "로그인 상태 확인 X"));
+        }
         //등록
         ArticleResponseDto data = articleService.registerArticle(
                 createRq.getTitle(),
                 createRq.getContent(),
-                memberService.getLoggedInMember(request));
+                member);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(ResultData.of(ResultCode.S_02, "게시글 등록 성공", data));

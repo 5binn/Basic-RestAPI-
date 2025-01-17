@@ -9,6 +9,7 @@ import CommentList from "./CommentList";
 export default function SingleArticle({ selectedArticleId }: any) {
   const [article, setArticle] = useState<Article | null>(null);
   const [commentList, setCommentList] = useState<Comment[]>([]);
+  const [isEmpty, setIsEmpty] = useState(false);
 
   useEffect(() => {
     axios.get(`/articles/${selectedArticleId}`).then((response) => {
@@ -21,6 +22,7 @@ export default function SingleArticle({ selectedArticleId }: any) {
   function fetchComments() {
     axios.get(`/comments/${selectedArticleId}`).then((response) => {
       console.log(response.data);
+      setIsEmpty(response.data.data.length === 0);
       setCommentList(response.data.data);
     });
   }
@@ -29,8 +31,12 @@ export default function SingleArticle({ selectedArticleId }: any) {
     <>
       <div className="single-container">
         <div className="article-top">
-          <span className="article-title">{article?.title}</span>
-          <span>작성자 {article?.author}</span>
+          <div className="article-title">
+            <span>{article?.title}</span>
+          </div>
+          <div>
+            <span>작성자 {article?.author}</span>
+          </div>
         </div>
         <div className="article-middle">
           <span>{article?.content}</span>
@@ -47,7 +53,11 @@ export default function SingleArticle({ selectedArticleId }: any) {
         />
       </div>
       <div>
-        <CommentList commentList={commentList} />
+        {isEmpty ? (
+          <span>등록된 댓글이 없습니다.</span>
+        ) : (
+          <CommentList commentList={commentList} />
+        )}
       </div>
     </>
   );

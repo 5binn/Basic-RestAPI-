@@ -11,7 +11,7 @@ export default function LoginLayout({ setIsLogin }: any) {
   return (
     <div className="container">
       <nav>
-        <button className="fixed-button">
+        <button className="fixed-button" onClick={() => setClicked(false)}>
           <FontAwesomeIcon icon={faHome} />
         </button>
         <div className="title">

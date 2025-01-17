@@ -1,11 +1,10 @@
 li {
   border: solid lightgray 1px;
-  cursor: pointer;
 }
 
 .container {
   margin-top: 10px;
-  width: 360px;
+  width: 400px;
 }
 .article-container {
   margin-top: 2px;
@@ -40,6 +39,7 @@ li {
   object-fit: cover;
   margin-right: 10px;
   padding: 8px;
+  cursor: pointer;
 }
 
 .info {
@@ -50,6 +50,11 @@ li {
 .username {
   font-weight: bold;
   font-size: 16px;
+  cursor: pointer;
+}
+
+.username:hover {
+  text-decoration: underline;
 }
 
 .timestamp {
@@ -157,4 +162,9 @@ textarea:focus {
 .article-title {
   overflow: hidden;
   text-overflow: ellipsis;
+  cursor: pointer;
+}
+
+.article-title:hover {
+  text-decoration: underline;
 }

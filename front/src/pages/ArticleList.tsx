@@ -28,17 +28,13 @@ export default function ArticleList({ setSelectedArticleId }: any) {
       <div className="container">
         <ul className="list">
           {isEmpty ? (
-            <span>등록된 게시물이 없습니다.</span>
+            <div className="isEmpty">
+              <span>등록된 게시물이 없습니다.</span>
+            </div>
           ) : (
             articleList.map((article) => (
-              <li
-                className="item"
-                key={article.id}
-                onClick={() => {
-                  setSelectedArticleId(article.id);
-                }}
-              >
-                <div className="header">
+              <li className="item" key={article.id}>
+                <div>
                   <FontAwesomeIcon icon={faUser} className="profile-img" />
                   <div className="info">
                     <span className="username">{article.author}</span>
@@ -48,7 +44,14 @@ export default function ArticleList({ setSelectedArticleId }: any) {
                   </div>
                 </div>
                 <div className="content">
-                  <p className="article-title">{article.title}</p>
+                  <p
+                    className="article-title"
+                    onClick={() => {
+                      setSelectedArticleId(article.id);
+                    }}
+                  >
+                    {article.title}
+                  </p>
                 </div>
                 <div className="actions">
                   <button className="actions-btn">Like</button>
