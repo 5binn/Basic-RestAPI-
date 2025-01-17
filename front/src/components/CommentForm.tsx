@@ -2,11 +2,14 @@ import { AxiosError } from "axios";
 import axios from "../utils/axiosInstance";
 import { useState } from "react";
 import { ErrorResponse } from "../types/Types";
+import "./CommentForm.css";
 
 export default function CommentForm({
   selectedArticleId,
+  fetchComments,
 }: {
   selectedArticleId: number;
+  fetchComments: () => void;
 }) {
   const [content, setContent] = useState("");
 
@@ -20,6 +23,7 @@ export default function CommentForm({
         });
         if (response.status === 201) {
           setContent("");
+          fetchComments();
         } else {
           alert(response.data.msg);
         }
@@ -37,16 +41,18 @@ export default function CommentForm({
   }
 
   return (
-    <div>
+    <div className="commentForm">
       <form onSubmit={handleRegister}>
-        <input
-          id="content"
-          onChange={(e) => {
-            setContent(e.target.value);
-          }}
-          value={content}
-        />
-        <button type="submit">등록</button>
+        <div className="commentForm-input">
+          <input
+            id="content"
+            onChange={(e) => {
+              setContent(e.target.value);
+            }}
+            value={content}
+          />
+          <button type="submit">등록</button>
+        </div>
       </form>
     </div>
   );

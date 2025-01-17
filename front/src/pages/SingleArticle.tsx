@@ -4,24 +4,26 @@ import axios from "../utils/axiosInstance";
 import { useEffect, useState } from "react";
 import formatDate from "../utils/formatDate";
 import "./SingleArticle.css";
+import CommentList from "./CommentList";
 
 export default function SingleArticle({ selectedArticleId }: any) {
   const [article, setArticle] = useState<Article | null>(null);
   const [commentList, setCommentList] = useState<Comment[]>([]);
+
   useEffect(() => {
     axios.get(`/articles/${selectedArticleId}`).then((response) => {
       console.log(response.data);
-      if (response.data) {
-        setArticle(response.data.data);
-      }
+      setArticle(response.data.data);
     });
-  }, []);
+    fetchComments();
+  }, [selectedArticleId]);
 
-  useEffect(() => {
+  function fetchComments() {
     axios.get(`/comments/${selectedArticleId}`).then((response) => {
+      console.log(response.data);
       setCommentList(response.data.data);
     });
-  }, []);
+  }
 
   return (
     <>
@@ -39,20 +41,13 @@ export default function SingleArticle({ selectedArticleId }: any) {
         </div>
       </div>
       <div>
-        <CommentForm selectedArticleId={selectedArticleId} />
+        <CommentForm
+          selectedArticleId={selectedArticleId}
+          fetchComments={fetchComments}
+        />
       </div>
       <div>
-        <ul>
-          {commentList.map((comment) => (
-            <li>
-              <span>{comment.content}</span>
-              <br />
-              <span>{comment.author}</span>
-              <br />
-              <span>{comment.createdDate}</span>
-            </li>
-          ))}
-        </ul>
+        <CommentList commentList={commentList} />
       </div>
     </>
   );
